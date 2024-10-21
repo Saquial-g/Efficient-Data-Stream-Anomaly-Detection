@@ -7,7 +7,7 @@ dataArray = []
 def genStream(t):
     # Generate the next data point
     pattern = dataArray[-1] + 5 * np.sin(2 * np.pi * t/50)
-    trend = 0.2
+    trend = 0.05
     noise = random.uniform(-18,18)
     point = pattern + noise + trend
 
@@ -24,11 +24,11 @@ def genStream(t):
     return point
 
 # Detector of anomalies by using a mix of ZScore and exponential moving average (EMA)
-#   - Alpha defines how much previous values affects the EMA 
+#   - Alpha defines how much the current point affects the EMA 
 #   - Threshold defines the acceptable range for the ZScore
 #   - Window defines the amount of points used to calculate the standard deviation
 class anomaly_detector():
-    def __init__(self, dataStream, alpha=0.2, threshold=1, window = 100):
+    def __init__(self, dataStream, alpha=0.2, threshold=1, window = 200):
         # Initialize the variables used by the detector. Make a first calculation
         self.EMA = [dataStream[-1], dataStream[-1]]
         self.alpha = alpha
@@ -63,7 +63,8 @@ class anomaly_detector():
         ZScore = abs(dataStream[-1] - self.EMA[1]) / self.std
         
         # If the ZScore is not within the defined threshold mark it as an anomaly
-        if ZScore > self.threshold:
+        # The first 50 data are ignored to allow the formation of a pattern
+        if ZScore > self.threshold and len(dataStream) > 50:
             self.anomalies.append(dataStream[-1])
             self.anomTime.append(t-1)
 

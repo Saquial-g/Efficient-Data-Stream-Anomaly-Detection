@@ -4,27 +4,30 @@ from matplotlib.animation import FuncAnimation
 import dataStream as ds
 
 class flowGraph():
-    #Generates the initial graph. Displays provided data, but can be initialized empty
+    # Initializes the graph variables.
+    #   - data and anomalies define the starting data and anomalies
+    #   - xsize defines how many data points are allowed in the graph
+    #   - limitXSize defines if the graph should be limited to the amount of data points specified by xsize
     def __init__(self, data=[300], anomalies=[], xsize = 500, limitXSize = True):
-        #Save the provided data in the local variables
+        # Save the provided data in the local variables
         ds.dataArray = data
         self.anomalies = anomalies
 
-        #Define the amount of values visible on the graph, could be setup by the user
+        # Define the amount of values visible on the graph, could be setup by the user
         self.xsize = xsize
         self.limitXSize = limitXSize
 
-        #Initialize anomaly detector
+        # Initialize anomaly detector
         self.detector = ds.anomaly_detector(data)
         
-        #Create the initial graph
+        # Create the initial graph
         self.fig, self.ax = plt.subplots()
         self.line, = self.ax.plot([], [])
         self.anomaly_points, = self.ax.plot([], [], 'ro', marker='.')  # red circles for anomalies
         plt.xlabel("Time")
         plt.ylabel("Value")
 
-        #Check for data provided, start with default values otherwise
+        # Check for data provided, start with default values otherwise
         if (len(data) > 0):
             self.ax.set_xlim(0, len(ds.dataArray))
             self.ax.set_ylim(min(ds.dataArray) - 5, max(ds.dataArray) + 5)
@@ -56,5 +59,6 @@ class flowGraph():
         self.anomaly_points.set_data(self.detector.anomTime, self.detector.anomalies)
     
     def animate(self):
+        # Create an animation by running the update function in a loop. Shows the graph
         ani = FuncAnimation(self.fig, self.update, cache_frame_data=False)
         plt.show()
