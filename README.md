@@ -13,13 +13,11 @@ Data stream generator and anomaly detector based on EMA and Z-Score using Python
 ## Installation
 
 To install the required libraries open the folder and run the command:
-
 	```
 	pip install -r requirements.txt
 	```
 
 If using conda, run the command:
-
 	```
 	conda create --name <env> --file requirements.txt
 	```
@@ -37,10 +35,10 @@ To start the graph, open the folder of the project and run the following command
 
 This code uses a mix of exponential moving average and Z-Score:
 
-- EMA is used to give more weight to more recent data in the average, mitigating the seasonal behaviour of the data.
-- Z-Score is used to judge how deviant is each data point compared to the previous behaviours.
+- EMA is used to give more weight to more recent data on average, mitigating the seasonal behavior of the data.
+- Z-Score is used to judge how deviant each data point is compared to the previous behaviors.
 
-The anomaly_detector class has no access to the data generation functions, so any tendency in the data is infered by the algorithm.
+The anomaly_detector class does not have access to the data generation functions, so the algorithm infers any tendency in the data.
 
 ## Contributing
 
